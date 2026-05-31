@@ -15,8 +15,14 @@ app.use(
   profileRoutes
 );
 
-const PORT =
-process.env.PORT || 5000;
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "Backend API is running successfully",
+    status: "OK"
+  });
+});
+
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(
