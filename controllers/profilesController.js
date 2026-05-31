@@ -1,11 +1,12 @@
 import { getGithubProfile } from "../services/gitHubServices.js";
-import {saveProfile,getProfiles,getProfileByUsername} from "../models/profileModels.js";
+import { saveProfile, getProfiles, getProfileByUsername } from "../models/profileModels.js";
 
-export const analyzeProfile = async (req,res) => {
+//analyze GitHub Profiles
+export const analyzeProfile = async (req, res) => {
   try {
     const { username } = req.params;
-    const data =await getGithubProfile(username);
-    const createdDate =new Date(data.created_at);
+    const data = await getGithubProfile(username);
+    const createdDate = new Date(data.created_at);
     const accountAgeDays = Math.floor(
       (Date.now() - createdDate) /
       (1000 * 60 * 60 * 24)
@@ -23,9 +24,9 @@ export const analyzeProfile = async (req,res) => {
       profile_url: data.html_url,
       avatar_url: data.avatar_url,
       created_at: new Date(data.created_at)
-                    .toISOString()
-                    .slice(0, 19)
-                    .replace("T", " ")
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ")
     };
     await saveProfile(profile);
     res.status(200).json({
@@ -39,8 +40,10 @@ export const analyzeProfile = async (req,res) => {
     });
   }
 };
-export const getAllProfiles=async (req, res) => {
-  const profiles =await getProfiles();
+
+//Get All GitHub Profiles
+export const getAllProfiles = async (req, res) => {
+  const profiles = await getProfiles();
 
   res.status(200).json({
     success: true,
@@ -48,8 +51,10 @@ export const getAllProfiles=async (req, res) => {
   });
 };
 
-export const getSingleProfile =async (req, res) => {
-  const profile =await getProfileByUsername(req.params.username);
+
+//Get Single GitHub Profile
+export const getSingleProfile = async (req, res) => {
+  const profile = await getProfileByUsername(req.params.username);
   if (!profile) {
     return res.status(404).json({
       success: false,
